@@ -153,6 +153,15 @@ const windowsScript = `; AutoHotkey script to focus LLM Chat popup
     return
 `;
 
+const macosScript = `#!/bin/bash
+# Focus LLM Chat popup window on macOS
+# Save as ~/bin/focus-llm-popup.sh
+# Make executable: chmod +x ~/bin/focus-llm-popup.sh
+# Bind to a shortcut using Automator or tools like Hammerspoon
+
+osascript -e 'tell application "System Events" to set frontmost of (first process whose name contains "LLM Chat") to true'
+`;
+
 function downloadScript(content: string, filename: string): void {
   const blob = new Blob([content], { type: 'text/plain' });
   const url = URL.createObjectURL(blob);
@@ -567,6 +576,22 @@ function handleThemeChange(event: Event): void {
               <pre class="chat-window__script-code">{{ windowsScript }}</pre>
               <p class="chat-window__script-hint">
                 Requires <a href="https://www.autohotkey.com/" target="_blank">AutoHotkey</a>. Run the script to enable Ctrl+Shift+L.
+              </p>
+            </div>
+
+            <div class="chat-window__script-section">
+              <div class="chat-window__script-header">
+                <h3>macOS</h3>
+                <button
+                  class="chat-window__script-download"
+                  @click="downloadScript(macosScript, 'focus-llm-popup.sh')"
+                >
+                  Download .sh
+                </button>
+              </div>
+              <pre class="chat-window__script-code">{{ macosScript }}</pre>
+              <p class="chat-window__script-hint">
+                Uses AppleScript. Bind with Automator or <a href="https://www.hammerspoon.org/" target="_blank">Hammerspoon</a>.
               </p>
             </div>
           </div>
@@ -1130,6 +1155,24 @@ function handleThemeChange(event: Event): void {
 
 .chat-window__shortcuts-modal {
   max-width: 550px;
+}
+
+.chat-window__shortcuts-modal .chat-window__settings-header {
+  padding: 10px 14px;
+}
+
+.chat-window__shortcuts-modal .chat-window__settings-header h2 {
+  font-size: 13px;
+}
+
+.chat-window__shortcuts-modal .chat-window__settings-close {
+  width: 24px;
+  height: 24px;
+}
+
+.chat-window__shortcuts-modal .chat-window__settings-close svg {
+  width: 14px;
+  height: 14px;
 }
 
 .chat-window__shortcuts-desc {
